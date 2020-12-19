@@ -26,6 +26,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("net.dv8tion:JDA:4.2.0_168")
+    implementation("com.github.ajalt.mordant:mordant:2.0.0-alpha1")
 }
 
 tasks {
