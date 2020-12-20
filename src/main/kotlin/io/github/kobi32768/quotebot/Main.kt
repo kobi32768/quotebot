@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import javax.security.auth.login.LoginException
 import java.io.File
+import javax.security.auth.login.LoginException
 import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
 
@@ -22,7 +22,10 @@ class QuoteBot : ListenerAdapter() {
         try {
             JDABuilder
                 .createDefault(
-                    File("./src/main/resources/token.txt").readText())
+                    this.javaClass.classLoader
+                        .getResourceAsStream("token.txt")!!
+                        .reader()
+                        .readText())
                 .addEventListeners(this)
                 .build()
         } catch (ex: LoginException) {
@@ -49,7 +52,10 @@ class QuoteBot : ListenerAdapter() {
         // Command
         if (content.startsWith("!quote")) {
             val commands = content.split(' ')
-            val version = File("./src/main/resources/version.txt").readText()
+            val version = this.javaClass.classLoader
+                .getResourceAsStream("version.txt")!!
+                .reader()
+                .readText()
 
             if (util.isContainOr(commands, "-h", "--help")) {
                 msg.sendMessage("help", event)
@@ -97,8 +103,6 @@ class QuoteBot : ListenerAdapter() {
                 log.printlog("Insufficient Permission Exception", State.EXCEPTION)
                 msg.sendErrorMessage(Error.CANNOT_REF, event); return
             }
-
-            log.printlog(util.compress64("999999999999999999"), State.DEBUG)
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 

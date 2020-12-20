@@ -1,5 +1,3 @@
-import java.io.File as File
-
 plugins {
     application
     kotlin("jvm") version "1.4.10"
@@ -9,7 +7,7 @@ application {
     mainClassName = "io.github.kobi32768.quotebot.MainKt"
 }
 
-group = "io.github.kobi32768"
+group   = "io.github.kobi32768"
 version = File("./src/main/resources/version.txt").readText()
 
 val jar by tasks.getting(Jar::class) {
@@ -31,9 +29,9 @@ dependencies {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "14"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "14"
     }
 }
