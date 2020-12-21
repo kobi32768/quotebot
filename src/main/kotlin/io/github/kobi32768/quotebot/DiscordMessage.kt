@@ -43,7 +43,7 @@ class DiscordMessage {
         }
 
         event.channel.sendMessage(embed.build()).queue()
-        log.printlogMsg("Successfully referenced", State.SUCCESS, data)
+        log.printlog("Successfully referenced", State.SUCCESS, data)
     }
 
     fun languageChanger(event: MessageReceivedEvent) {

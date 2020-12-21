@@ -7,14 +7,12 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import java.io.File
 import javax.security.auth.login.LoginException
 import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
 
 fun main() {
     QuoteBot().start()
-    Logger().printlog("Quote Bot started", State.INFORMATION)
 }
 
 class QuoteBot : ListenerAdapter() {
@@ -33,6 +31,10 @@ class QuoteBot : ListenerAdapter() {
         } catch (ex: InterruptedException) {
             ex.printStackTrace()
         }
+
+        val log = Logger()
+        log.makeLogFile()
+        log.printlog("Quote Bot started", State.INFORMATION)
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
@@ -93,13 +95,16 @@ class QuoteBot : ListenerAdapter() {
                 quotedGuild   = event.jda.getGuildById     (ids[i])!!
                 quotedChannel = quotedGuild.getTextChannelById   (ids[i + 1])!!
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
-            } catch (ex: NullPointerException) {
+            }
+            catch (ex: NullPointerException) {
                 log.printlog("Null Pointer Exception", State.EXCEPTION)
                 msg.sendErrorMessage(Error.NOT_EXIST, event); return
-            } catch (ex: ExecutionException) {
+            }
+            catch (ex: ExecutionException) {
                 log.printlog("Execution Exception", State.EXCEPTION)
                 msg.sendErrorMessage(Error.NOT_EXIST_MSG, event); return
-            } catch (ex: InsufficientPermissionException) {
+            }
+            catch (ex: InsufficientPermissionException) {
                 log.printlog("Insufficient Permission Exception", State.EXCEPTION)
                 msg.sendErrorMessage(Error.CANNOT_REF, event); return
             }
@@ -111,21 +116,23 @@ class QuoteBot : ListenerAdapter() {
             if (quotedChannel.isNSFW) {
                 log.printlog("Quote from NSFW channel", State.FORBIDDEN)
                 msg.sendErrorMessage(Error.NSFW, event)
-            } else if (!role.isEveryoneViewable(quotedData)) {
+            }
+            else if (!role.isEveryoneViewable(quotedData)) {
                 if (util.isForce(event)) {
                     msg.sendRegularEmbedMessage(quotedData)
-                    log.printlogMsg("Use Force", State.INFORMATION, quotedData)
+                    log.printlog("Use Force", State.INFORMATION, quotedData)
                 } else {
                     msg.sendErrorMessage(Error.FORBIDDEN, event)
-                    log.printlogMsg("Non-force", State.FORBIDDEN, quotedData)
+                    log.printlog("Non-force", State.FORBIDDEN, quotedData)
                 }
-            } else if (!msg.isSameGuild(quotedData)) {
+            }
+            else if (!msg.isSameGuild(quotedData)) {
                 if (util.isForce(event)) {
                     msg.sendRegularEmbedMessage(quotedData)
-                    log.printlogMsg("Use Force", State.INFORMATION, quotedData)
+                    log.printlog("Use Force", State.INFORMATION, quotedData)
                 } else {
                     msg.sendErrorMessage(Error.CROSS_GUILD, event)
-                    log.printlogMsg("Cross-Guild", State.FORBIDDEN, quotedData)
+                    log.printlog("Cross-Guild", State.FORBIDDEN, quotedData)
                 }
             } else {
                 msg.sendRegularEmbedMessage(quotedData)
