@@ -111,8 +111,6 @@ class QuoteBot : ListenerAdapter() {
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 
-            role.isEveryoneViewable(quotedData)
-
             if (quotedChannel.isNSFW) {
                 log.printlog("Quote from NSFW channel", State.FORBIDDEN)
                 msg.sendErrorMessage(Error.NSFW, event)
