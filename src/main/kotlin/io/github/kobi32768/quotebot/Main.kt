@@ -81,7 +81,7 @@ class QuoteBot : ListenerAdapter() {
             val quotedMessage: Message
 
             try {
-                quotedGuild   = event.jda.getGuildById     (ids[i])!!
+                quotedGuild   = event.jda.getGuildById           (ids[i])!!
                 quotedChannel = quotedGuild.getTextChannelById   (ids[i + 1])!!
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
             }
@@ -107,22 +107,24 @@ class QuoteBot : ListenerAdapter() {
             else if (!role.isEveryoneViewable(quotedData)) {
                 if (util.isForce(event)) {
                     msg.sendRegularEmbedMessage(quotedData)
-                    log.printlog("Use Force", State.INFORMATION, quotedData)
+                    log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                 } else {
                     msg.sendErrorMessage(Error.FORBIDDEN, event)
-                    log.printlog("Non-force", State.FORBIDDEN, quotedData)
+                    log.printlog("@everyone doesn't have permission",
+                        State.FORBIDDEN, false, quotedData)
                 }
             }
-            else if (!msg.isSameGuild(quotedData)) {
+            else if (msg.isSameGuild(quotedData)) {
+                msg.sendRegularEmbedMessage(quotedData)
+                log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+            }else {
                 if (util.isForce(event)) {
                     msg.sendRegularEmbedMessage(quotedData)
-                    log.printlog("Use Force", State.INFORMATION, quotedData)
+                    log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                 } else {
                     msg.sendErrorMessage(Error.CROSS_GUILD, event)
-                    log.printlog("Cross-Guild", State.FORBIDDEN, quotedData)
+                    log.printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
                 }
-            } else {
-                msg.sendRegularEmbedMessage(quotedData)
             }
         }
     }
