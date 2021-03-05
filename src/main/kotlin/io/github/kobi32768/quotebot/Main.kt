@@ -59,20 +59,9 @@ class QuoteBot : ListenerAdapter() {
                 .reader()
                 .readText()
 
-            if (util.isContainOr(commands, "-h", "--help")) {
-                msg.sendMessage("help", event)
-                log.printlog("Displayed help", State.INFORMATION)
-            }
-
             if (util.isContainOr(commands, "-v", "--version")) {
                 msg.sendMessage("**Version: ** $version", event)
                 log.printlog("Displayed version", State.INFORMATION)
-            }
-
-            // todo: MSG表示後またはコマンド引数として入力できるようにする
-            if (util.isContainOr(commands, "-l", "--language")) {
-                msg.languageChanger(event)
-                log.printlog("Displayed language changer", State.INFORMATION)
             }
         }
 
