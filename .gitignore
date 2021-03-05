@@ -3,6 +3,8 @@
 # Directories
 /.gradle/
 /build/
+/out/
+/log/
 
 # Files
 token
