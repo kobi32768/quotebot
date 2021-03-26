@@ -44,7 +44,7 @@ class Logger {
     }
 
     fun makeLogFile() {
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss")
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")
         val time      = LocalDateTime.now().format(formatter)
 
         printlog("Log file created: $time", State.INFORMATION)
