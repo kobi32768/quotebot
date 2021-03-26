@@ -32,19 +32,12 @@ class QuoteBot : ListenerAdapter() {
             ex.printStackTrace()
         }
 
-        val log = Logger()
-        log.makeLogFile()
-        log.printlog("Quote Bot started", State.INFORMATION)
+        makeLogFile()
+        printlog("Quote Bot started", State.INFORMATION)
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (event.author.isBot) return
-
-        val log  = Logger()
-        val util = Utility()
-        val link = DiscordLink()
-        val role = DiscordRole()
-        val msg  = DiscordMessage()
 
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay
@@ -59,23 +52,23 @@ class QuoteBot : ListenerAdapter() {
                 .reader()
                 .readText()
 
-            if (util.isContainOr(commands, "-v", "--version")) {
-                msg.sendMessage("**Version: ** $version", event)
-                log.printlog("Displayed version", State.INFORMATION)
+            if (commands.isContainOr("-v", "--version")) {
+                event.sendMessage("**Version: ** $version")
+                printlog("Displayed version", State.INFORMATION)
             }
         }
 
         // Quote
-        if (!util.isContain(content, prefix)) return
+        if (!content.isContain(prefix)) return
 
-        val ids = link.extractIDs(content)
+        val ids = content.extractIDs()
         for (i in ids.indices step 3) {
-            if (!link.areValidLinks(content)[i/3] && !util.isForce(event)) {
-                log.printlog("Invalid Link", State.INVALID)
+            if (!content.areValidLinks()[i/3] && !event.isForce()) {
+                printlog("Invalid Link", State.INVALID)
                 continue
             }
 
-            // Pre define
+            // Pre-define
             val quotedGuild  : Guild
             val quotedChannel: TextChannel
             val quotedMessage: Message
@@ -86,44 +79,43 @@ class QuoteBot : ListenerAdapter() {
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
             }
             catch (ex: NullPointerException) {
-                log.printlog("Null Pointer Exception", State.EXCEPTION)
-                msg.sendErrorMessage(Error.NOT_EXIST, event); return
+                printlog("Null Pointer Exception", State.EXCEPTION)
+                event.sendErrorMessage(Error.NOT_EXIST); return
             }
             catch (ex: ExecutionException) {
-                log.printlog("Execution Exception", State.EXCEPTION)
-                msg.sendErrorMessage(Error.NOT_EXIST_MSG, event); return
+                printlog("Execution Exception", State.EXCEPTION)
+                event.sendErrorMessage(Error.NOT_EXIST_MSG); return
             }
             catch (ex: InsufficientPermissionException) {
-                log.printlog("Insufficient Permission Exception", State.EXCEPTION)
-                msg.sendErrorMessage(Error.CANNOT_REF, event); return
+                printlog("Insufficient Permission Exception", State.EXCEPTION)
+                event.sendErrorMessage(Error.CANNOT_REF); return
             }
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 
             if (quotedChannel.isNSFW) {
-                log.printlog("Quote from NSFW channel", State.FORBIDDEN)
-                msg.sendErrorMessage(Error.NSFW, event)
+                printlog("Quote from NSFW channel", State.FORBIDDEN)
+                event.sendErrorMessage(Error.NSFW)
             }
-            else if (!role.isEveryoneViewable(quotedData)) {
-                if (util.isForce(event)) {
-                    msg.sendRegularEmbedMessage(quotedData)
-                    log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+            else if (!quotedData.isEveryoneViewable()) {
+                if (event.isForce()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                 } else {
-                    msg.sendErrorMessage(Error.FORBIDDEN, event)
-                    log.printlog("@everyone doesn't have permission",
-                        State.FORBIDDEN, false, quotedData)
+                    event.sendErrorMessage(Error.FORBIDDEN)
+                    printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
                 }
             }
-            else if (msg.isSameGuild(quotedData)) {
-                msg.sendRegularEmbedMessage(quotedData)
-                log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+            else if (quotedData.isSameGuild()) {
+                sendRegularEmbedMessage(quotedData)
+                printlog("Successfully referenced", State.SUCCESS, true, quotedData)
             }else {
-                if (util.isForce(event)) {
-                    msg.sendRegularEmbedMessage(quotedData)
-                    log.printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                if (event.isForce()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                 } else {
-                    msg.sendErrorMessage(Error.CROSS_GUILD, event)
-                    log.printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
+                    event.sendErrorMessage(Error.CROSS_GUILD)
+                    printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
                 }
             }
         }
