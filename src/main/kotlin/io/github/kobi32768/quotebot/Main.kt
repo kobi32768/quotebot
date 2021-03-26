@@ -54,7 +54,7 @@ class QuoteBot : ListenerAdapter() {
 
             if (commands.isContainOr("-v", "--version")) {
                 event.sendMessage("**Version: ** $version")
-                printlog("Displayed version", State.INFORMATION)
+                printlog("Displayed version ($version)", State.INFORMATION)
             }
         }
 
