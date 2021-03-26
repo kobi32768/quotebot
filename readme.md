@@ -11,7 +11,9 @@
     - [2.1 distribute](#21-distribute)
     - [2.2 scp](#22-scp)
     - [2.3 unzip](#23-unzip)
-    - [2.4 systemd setup](#24-systemd-setup)
+    - [2.4 systemd](#24-systemd)
+      - [2.4.1 setup](#241-setup)
+      - [2.4.2 utilities](#242-utilities)
 
 ## 1 description
 
@@ -49,7 +51,9 @@ Move zipped distribute file on `~/quotebot` with WinSCP
 
 `$ unzip quotebot-<version>,zip`
 
-### 2.4 systemd setup
+### 2.4 systemd
+
+#### 2.4.1 setup
 
 Automatically execute latest
 
@@ -81,6 +85,8 @@ WantedBy=multi-user.target
 
 Reload systemctl  
 `$ systemctl daemon-reload`
+
+#### 2.4.2 utilities
 
 Check status  
 `$ systemctl list-unit-files | grep quotebot`
