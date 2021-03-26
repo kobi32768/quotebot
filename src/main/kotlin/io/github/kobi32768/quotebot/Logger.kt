@@ -32,10 +32,6 @@ class Logger {
         return rawText
     }
 
-    fun printlog(error: Error, state: State, useForce: Boolean = false, data: MessageData? = null): String {
-        return printlog(error.description, state, useForce, data)
-    }
-
     private fun writeLogFile(text: String) {
         val filename = File("log/latest.txt").readText()
 
