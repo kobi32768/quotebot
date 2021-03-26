@@ -59,7 +59,9 @@ Automatically execute latest
 
 Make shell script for bot starting
 
-```bash:start-quotebot.sh
+`start-quotebot.sh`:
+
+```bash
 #!/bin/bash
 
 latest=`ls -drt /home/<user>/quotebot/*/ | tail -n 1`
@@ -70,7 +72,9 @@ cd $latest
 Make service file  
 `$ ~/micro /etc/systemd/system/quotebot.service`
 
-```ini:quotebot.service
+`quotebot.service`:
+
+```INI
 [Unit]
 Description=QuoteBot
 After=netwowrk.target
