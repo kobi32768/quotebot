@@ -4,7 +4,7 @@
 
 - [Quote Bot](#quote-bot)
   - [Table of Contents](#table-of-contents)
-  - [1 description](#1-description)
+  - [1 feature](#1-feature)
     - [1.1 quote](#11-quote)
     - [1.2 command](#12-command)
   - [2 deploy](#2-deploy)
@@ -15,7 +15,7 @@
       - [2.4.1 setup](#241-setup)
       - [2.4.2 utility](#242-utility)
 
-## 1 description
+## 1 feature
 
 ### 1.1 quote
 
