@@ -13,8 +13,8 @@
     - [2.3 unzip](#23-unzip)
     - [2.4 systemd](#24-systemd)
       - [2.4.1 update](#241-update)
-      - [2.4.2 setup](#241-setup)
-      - [2.4.3 utility](#242-utility)
+      - [2.4.2 setup](#242-setup)
+      - [2.4.3 utility](#243-utility)
 
 ## 1 description
 
