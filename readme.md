@@ -53,7 +53,13 @@ Move zipped distribute file on `~/quotebot` with WinSCP
 
 ### 2.4 systemd
 
-#### 2.4.1 setup
+#### 2.4.1 update
+
+Service restart
+
+`$ systemctl restart quotebot`
+
+#### 2.4.2 setup
 
 Automatically execute latest
 
@@ -90,7 +96,7 @@ WantedBy=multi-user.target
 Reload systemctl  
 `$ systemctl daemon-reload`
 
-#### 2.4.2 utility
+#### 2.4.3 utility
 
 Check status  
 `$ systemctl list-unit-files | grep quotebot`
