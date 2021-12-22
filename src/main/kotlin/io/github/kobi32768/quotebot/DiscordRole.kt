@@ -17,11 +17,12 @@ private fun TextChannel.isRoleAllowed(role: Role, permission: Permission): Boole
     val index = this.getRoleIndex(role)
 
     // Return default when not overridden
-    return if (index == -1) {
-        role.permissions
+    return if (index != -1) {
+        overrides[index].allowed.contains(permission) ||
+        (overrides[index].inherit.contains(permission) && role.permissions.contains(permission))
     } else {
-        overrides[index].allowed
-    }.contains(permission)
+        role.permissions.contains(permission)
+    }
 }
 
 private fun TextChannel.getRoleIndex(role: Role): Int {
