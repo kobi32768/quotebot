@@ -93,7 +93,11 @@ class QuoteBot : ListenerAdapter() {
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 
-            if (quotedChannel.isNSFW) {
+            if (quotedData.isSameChannel()) {
+                sendRegularEmbedMessage(quotedData)
+                printlog("Successfully referenced", State.SUCCESS, false, quotedData)
+            }
+            else if (quotedChannel.isNSFW) {
                 printlog("Quote from NSFW channel", State.FORBIDDEN)
                 event.sendErrorMessage(Error.NSFW)
             }

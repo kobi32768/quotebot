@@ -20,6 +20,10 @@ fun MessageData.isSameGuild(): Boolean {
     return this.guild == this.event.guild
 }
 
+fun MessageData.isSameChannel(): Boolean {
+    return this.channel == this.event.channel
+}
+
 fun sendRegularEmbedMessage(data: MessageData) {
     val guild = data.guild
     val channel = data.channel
