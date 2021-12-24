@@ -8,8 +8,7 @@ fun MessageData.isEveryoneViewable(): Boolean {
     val channel = this.channel
     val everyone = this.guild.roleCache.last()
 
-    return (channel.isRoleAllowed(everyone, Permission.VIEW_CHANNEL) ||
-            channel.isRoleAllowed(everyone, Permission.MESSAGE_HISTORY))
+    return channel.isRoleAllowed(everyone, Permission.VIEW_CHANNEL)
 }
 
 private fun TextChannel.isRoleAllowed(role: Role, permission: Permission): Boolean {
