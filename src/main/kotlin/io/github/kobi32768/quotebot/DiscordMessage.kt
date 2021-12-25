@@ -1,6 +1,7 @@
 package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -22,6 +23,13 @@ fun MessageData.isSameGuild(): Boolean {
 
 fun MessageData.isSameChannel(): Boolean {
     return this.channel == this.event.channel
+}
+
+fun MessageData.isForceQuotable(): Boolean {
+    val channel = this.channel
+    val member = this.event.member!!
+
+    return member.hasPermission(channel, Permission.MANAGE_CHANNEL) || member.hasPermission(channel, Permission.MESSAGE_MANAGE) || member.hasPermission(channel, Permission.ADMINISTRATOR)
 }
 
 fun sendRegularEmbedMessage(data: MessageData) {

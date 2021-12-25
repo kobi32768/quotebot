@@ -98,13 +98,28 @@ class QuoteBot : ListenerAdapter() {
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
             }
             else if (quotedChannel.isNSFW) {
-                printlog("Quote from NSFW channel", State.FORBIDDEN)
-                event.sendErrorMessage(Error.NSFW)
+                if (event.isForce()) {
+                    if (quotedData.isForceQuotable()) {
+                        sendRegularEmbedMessage(quotedData)
+                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                    } else {
+                        event.sendErrorMessage(Error.FORCE_FAILED)
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
+                    }
+                } else {
+                    printlog("Quote from NSFW channel", State.FORBIDDEN)
+                    event.sendErrorMessage(Error.NSFW)
+                }
             }
             else if (!quotedData.isEveryoneViewable()) {
                 if (event.isForce()) {
-                    sendRegularEmbedMessage(quotedData)
-                    printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                    if (quotedData.isForceQuotable()) {
+                        sendRegularEmbedMessage(quotedData)
+                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                    } else {
+                        event.sendErrorMessage(Error.FORCE_FAILED)
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
+                    }
                 } else {
                     event.sendErrorMessage(Error.FORBIDDEN)
                     printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
@@ -115,8 +130,13 @@ class QuoteBot : ListenerAdapter() {
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
             }else {
                 if (event.isForce()) {
-                    sendRegularEmbedMessage(quotedData)
-                    printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                    if (quotedData.isForceQuotable()) {
+                        sendRegularEmbedMessage(quotedData)
+                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
+                    } else {
+                        event.sendErrorMessage(Error.FORCE_FAILED)
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
+                    }
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)
                     printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
