@@ -37,6 +37,12 @@ enum class Error(    title_ja: String,     description_ja: String,
         "NSFWチャンネルからは引用できません。",
         "NSFW Channel",
         "Can't be quoted from NSFW channel."
+    ),
+    FORCE_FAILED(
+        "権限不足",
+        "Forceオプションを使用するために必要な権限がありません。",
+        "You need more permissions",
+        "You don't have the required permissions to force quoting."
     );
 
     val title       = title_ja
