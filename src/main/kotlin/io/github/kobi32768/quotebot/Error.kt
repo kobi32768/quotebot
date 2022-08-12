@@ -33,10 +33,10 @@ enum class Error(    title_ja: String,     description_ja: String,
         "Quote Bot doesn't have permission"
     ),
     NSFW(
-        "NSFWチャンネル",
-        "NSFWチャンネルからは引用できません。",
+        "NSFWチャンネルからの引用",
+        "NSFWチャンネルからの引用はForceオプション`-f`が必要です。",
         "NSFW Channel",
-        "Can't be quoted from NSFW channel."
+        "Need the Force Option to quote from NSFW channel."
     ),
     FORCE_FAILED(
         "権限不足",
