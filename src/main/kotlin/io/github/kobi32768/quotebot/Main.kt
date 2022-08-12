@@ -129,7 +129,7 @@ class QuoteBot : ListenerAdapter() {
             else if (quotedData.isSameGuild()) {
                 sendRegularEmbedMessage(quotedData)
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            }else {
+            } else {
                 if (event.isForce()) {
                     if (quotedData.isForceQuotable()) {
                         sendRegularEmbedMessage(quotedData)
