@@ -43,6 +43,7 @@ class QuoteBot : ListenerAdapter() {
         val content = event.message.contentDisplay
             .toLowerCase()
             .replace("https://discordapp.com/channels/", prefix) // old to new
+            .replace("https://ptb.discord.com/channels/", prefix) // ptb to general
 
         // Command
         if (content.startsWith("!quote")) {
