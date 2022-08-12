@@ -32,14 +32,23 @@ fun MessageData.isForceQuotable(): Boolean {
     return member.hasPermission(channel, Permission.MANAGE_CHANNEL) || member.hasPermission(channel, Permission.MESSAGE_MANAGE) || member.hasPermission(channel, Permission.ADMINISTRATOR)
 }
 
-fun sendRegularEmbedMessage(data: MessageData) {
+fun createEmbedTitle(data: MessageData): String {
     val guild = data.guild
     val channel = data.channel
+    val category = channel.parent
+
+    return if (category != null)
+        "from: ${category.name} / ${channel.name} (${guild.name})"
+    else
+        "from: ${channel.name} (${guild.name})"
+}
+
+fun sendRegularEmbedMessage(data: MessageData) {
     val message = data.message
     val event = data.event
 
     val embed = EmbedBuilder()
-        .setTitle("from: ${channel.name} (${guild.name})")
+        .setTitle(createEmbedTitle(data))
         .setDescription(message.contentDisplay)
         .setTimestamp(message.timeCreated)
         .setColor(Color(238, 150, 181))
