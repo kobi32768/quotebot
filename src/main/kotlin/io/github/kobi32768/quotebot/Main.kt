@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
 import javax.security.auth.login.LoginException
 import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
@@ -25,6 +26,7 @@ class QuoteBot : ListenerAdapter() {
                         .reader()
                         .readText())
                 .addEventListeners(this)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build()
         } catch (ex: LoginException) {
             ex.printStackTrace()
@@ -100,13 +102,7 @@ class QuoteBot : ListenerAdapter() {
             }
             else if (quotedChannel.isNSFW) {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     printlog("Quote from NSFW channel", State.FORBIDDEN)
                     event.sendErrorMessage(Error.NSFW)
@@ -114,13 +110,7 @@ class QuoteBot : ListenerAdapter() {
             }
             else if (!quotedData.isEveryoneViewable()) {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     event.sendErrorMessage(Error.FORBIDDEN)
                     printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
@@ -131,13 +121,7 @@ class QuoteBot : ListenerAdapter() {
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
             } else {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)
                     printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)

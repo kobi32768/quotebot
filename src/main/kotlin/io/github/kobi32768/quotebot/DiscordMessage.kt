@@ -3,6 +3,7 @@ package io.github.kobi32768.quotebot
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.awt.Color
@@ -25,11 +26,30 @@ fun MessageData.isSameChannel(): Boolean {
     return this.channel == this.event.channel
 }
 
-fun MessageData.isForceQuotable(): Boolean {
-    val channel = this.channel
-    val member = this.event.member!!
+fun MessageData.callForceQuote() {
+    val guild = this.guild
+    val user = this.event.member!!.user
 
-    return member.hasPermission(channel, Permission.MANAGE_CHANNEL) || member.hasPermission(channel, Permission.MESSAGE_MANAGE) || member.hasPermission(channel, Permission.ADMINISTRATOR)
+    guild.findMembers { it.user == user }
+        .onSuccess { members -> forceQuote(this, members) }
+}
+
+fun forceQuote(data: MessageData, foundMembers: List<Member>) {
+    val member = foundMembers.getOrNull(0) // size might be 0 or 1
+    val channel =data.channel
+
+    if (member != null) {
+        if (member.hasPermission(channel, Permission.MANAGE_CHANNEL) ||
+            member.hasPermission(channel, Permission.MESSAGE_MANAGE) ||
+            member.hasPermission(Permission.ADMINISTRATOR)) {
+            sendRegularEmbedMessage(data)
+            printlog("Successfully referenced", State.SUCCESS, true, data)
+            return
+        }
+    }
+
+    data.event.sendErrorMessage(Error.FORCE_FAILED)
+    printlog("Need more permissions to force quoting.", State.FAILED, false, data)
 }
 
 fun createEmbedTitle(data: MessageData): String {
