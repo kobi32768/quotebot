@@ -52,8 +52,7 @@ fun sendRegularEmbedMessage(data: MessageData) {
             message.author.effectiveAvatarUrl)
     }
 
-    event.channel
-        .sendMessage(embed.build())
+    event.channel.sendMessageEmbeds(embed.build())
         .queue()
 }
 

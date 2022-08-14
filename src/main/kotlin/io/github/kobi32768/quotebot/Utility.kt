@@ -20,9 +20,7 @@ fun List<String>.isContainOr(vararg substring: String): Boolean {
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
-    return this.message.contentDisplay
-        .split(' ')
-        .isContainOr("-f", "--force")
+    return this.message.contentDisplay.split(' ').isContainOr("-f", "--force")
 }
 
 fun printlnf(text: String, vararg args: String) {
