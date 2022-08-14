@@ -6,8 +6,7 @@ fun String.isContain(substring: String): Boolean {
     return this.indexOf(substring) >= 0
 }
 
-fun String.isContainOr(vararg substring: String): Boolean {
-    // foreach もどき
+fun String.isContainOr(vararg substring: String): Boolean { // foreach もどき
     return substring.indices.any { i: Int ->
         this.isContain(substring[i])
     }

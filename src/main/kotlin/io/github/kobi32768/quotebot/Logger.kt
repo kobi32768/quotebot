@@ -4,7 +4,12 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun printlog(message: String, state: State, useForce: Boolean = false, data: MessageData? = null): String {
+fun printlog(
+    message: String,
+    state: State,
+    useForce: Boolean = false,
+    data: MessageData? = null,
+): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss.ss")
     val time = LocalDateTime.now().format(formatter)
 
