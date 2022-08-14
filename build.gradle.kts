@@ -1,10 +1,8 @@
-plugins {
-    application
-    kotlin("jvm") version "1.4.10"
-}
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-application {
-    mainClassName = "io.github.kobi32768.quotebot.MainKt"
+plugins {
+    kotlin("jvm") version "1.7.10"
+    application
 }
 
 group   = "io.github.kobi32768"
@@ -18,20 +16,18 @@ val jar by tasks.getting(Jar::class) {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("net.dv8tion:JDA:4.2.0_168")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.17")
     implementation("com.github.ajalt.mordant:mordant:2.0.0-alpha1")
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "14"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "14"
-    }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+application {
+    mainClass.set("io.github.kobi32768.quotebot.MainKt")
 }
