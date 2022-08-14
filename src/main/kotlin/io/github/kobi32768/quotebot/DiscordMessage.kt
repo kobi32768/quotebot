@@ -2,6 +2,7 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.awt.Color
@@ -18,16 +19,16 @@ fun MessageReceivedEvent.sendErrorMessage(error: Error) {
 }
 
 fun MessageData.isSameGuild(): Boolean {
-    return this.guild == this.event.guild
+    return this.event.channelType != ChannelType.PRIVATE && this.guild == this.event.guild
 }
 
 fun MessageData.isSameChannel(): Boolean {
-    return this.channel == this.event.channel
+    return this.event.channelType != ChannelType.PRIVATE && this.channel == this.event.channel
 }
 
 fun MessageData.callForceQuote() {
     val guild = this.guild
-    val user = this.event.member!!.user
+    val user = this.event.author
 
     guild.findMembers { it.user == user }
         .onSuccess { members -> forceQuote(this, members) }
