@@ -6,7 +6,7 @@ enum class Error(    title_ja: String,     description_ja: String,
         "存在しないメッセージ",
         "`Quote Bot`が参加していないサーバーからの引用の可能性があります。",
         "Message that not exist",
-        "It's possible that the quotation is from a server that quotebot cannot see."
+        "It's possible that the quotation is from a server that Quote Bot cannot see."
     ),
     NOT_EXIST_MSG(
         "存在しないメッセージ",
@@ -22,21 +22,21 @@ enum class Error(    title_ja: String,     description_ja: String,
     ),
     FORBIDDEN(
         "閲覧を禁止されているチャンネル",
-        "`@everyone`は閲覧権限がありません。",
+        "`@everyone`に閲覧権限がないため、引用にはForceオプション`-f`が必要です。",
         "Channel that need permission",
-        "@everyone doesn't have permission."
+        "@everyone doesn't have permission. Need the Force Option to quote."
     ),
     CANNOT_REF(
         "閲覧を禁止されているチャンネル",
         "`Quote Bot`は閲覧権限がありません。",
         "Channel that can't be referenced",
-        "Quote Bot doesn't have permission"
+        "Quote Bot doesn't have permission."
     ),
     NSFW(
-        "NSFWチャンネル",
-        "NSFWチャンネルからは引用できません。",
+        "NSFWチャンネルからの引用",
+        "NSFWチャンネルからの引用はForceオプション`-f`が必要です。",
         "NSFW Channel",
-        "Can't be quoted from NSFW channel."
+        "Need the Force Option to quote from NSFW channel."
     ),
     FORCE_FAILED(
         "権限不足",
