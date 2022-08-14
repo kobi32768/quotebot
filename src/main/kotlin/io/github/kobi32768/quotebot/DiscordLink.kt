@@ -1,7 +1,7 @@
 package io.github.kobi32768.quotebot
 
 private fun String.extractLinks(): List<String> {
-    return Regex("""https://discord.com/channels/\d{18}/\d{18}/\d{18}""").findAll(this).map { it.value }.toList()
+    return Regex("""https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""").findAll(this).map { it.value }.toList()
 }
 
 fun String.extractIDs(): List<String> {
