@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
 import java.util.*
 import java.util.concurrent.ExecutionException
 import javax.security.auth.login.LoginException
@@ -23,7 +24,10 @@ class QuoteBot : ListenerAdapter() {
                     this.javaClass.classLoader
                         .getResourceAsStream("token.txt")!!
                         .reader()
-                        .readText())
+                        .readText()
+                        .trim()
+                )
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .addEventListeners(this)
                 .build()
         } catch (ex: LoginException) {
@@ -51,6 +55,7 @@ class QuoteBot : ListenerAdapter() {
                 .getResourceAsStream("version.txt")!!
                 .reader()
                 .readText()
+                .trim()
 
             if (commands.isContainOr("-v", "--version")) {
                 event.sendMessage("**Version: ** $version")
@@ -74,8 +79,8 @@ class QuoteBot : ListenerAdapter() {
             val quotedMessage: Message
 
             try {
-                quotedGuild   = event.jda.getGuildById           (ids[i])!!
-                quotedChannel = quotedGuild.getTextChannelById   (ids[i + 1])!!
+                quotedGuild = event.jda.getGuildById(ids[i])!!
+                quotedChannel = quotedGuild.getTextChannelById(ids[i + 1])!!
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
             }
             catch (ex: NullPointerException) {
