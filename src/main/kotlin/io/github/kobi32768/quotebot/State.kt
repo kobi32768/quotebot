@@ -1,6 +1,6 @@
 package io.github.kobi32768.quotebot
 
-import com.github.ajalt.mordant.terminal.TextColors
+import com.github.ajalt.mordant.rendering.TextColors
 import java.util.*
 
 enum class State(val color: TextColors) {
