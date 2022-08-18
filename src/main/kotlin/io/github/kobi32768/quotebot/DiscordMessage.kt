@@ -55,7 +55,7 @@ fun forceQuote(data: MessageData, foundMembers: List<Member>) {
 fun createEmbedTitle(data: MessageData): String {
     val guild = data.guild
     val channel = data.channel
-    val category = channel.parent
+    val category = channel.parentCategory
 
     return if (category != null)
         "from: ${category.name} / ${channel.name} (${guild.name})"
@@ -84,5 +84,5 @@ fun sendRegularEmbedMessage(data: MessageData) {
         message.author.effectiveAvatarUrl
     )
 
-    event.channel.sendMessage(embed.build()).queue()
+    event.channel.sendMessageEmbeds(embed.build()).queue()
 }

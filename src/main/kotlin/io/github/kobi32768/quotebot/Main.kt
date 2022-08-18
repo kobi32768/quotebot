@@ -2,12 +2,13 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
+import java.util.*
 import javax.security.auth.login.LoginException
 import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
@@ -23,7 +24,9 @@ class QuoteBot : ListenerAdapter() {
                 this.javaClass.classLoader.getResourceAsStream("token.txt")!!
                     .reader()
                     .readText()
+                    .trim()
             ).addEventListeners(this)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build()
         } catch (ex: LoginException) {
@@ -40,7 +43,7 @@ class QuoteBot : ListenerAdapter() {
         if (event.author.isBot) return
 
         val prefix = "https://discord.com/channels/"
-        val content = event.message.contentDisplay.toLowerCase()
+        val content = event.message.contentDisplay.lowercase(Locale.getDefault())
             .replace("https://discordapp.com/channels/", prefix) // old to new
             .replace("https://ptb.discord.com/channels/", prefix) // ptb to general
 
@@ -50,6 +53,7 @@ class QuoteBot : ListenerAdapter() {
             val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
                 .reader()
                 .readText()
+                .trim()
 
             if (commands.isContainOr("-v", "--version")) {
                 event.sendMessage("**Version: ** $version")
