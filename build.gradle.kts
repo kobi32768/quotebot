@@ -6,7 +6,7 @@ plugins {
 }
 
 group   = "io.github.kobi32768"
-version = file("src/main/resources/version.txt").readText()
+version = file("src/main/resources/version.txt").readText().trim()
 
 val jar by tasks.getting(Jar::class) {
     manifest {
