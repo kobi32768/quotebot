@@ -19,8 +19,7 @@ fun String.areValidLinks(): List<Boolean> {
     val list = mutableListOf<Boolean>()
     val links = this.extractLinks()
 
-    for (i in links.indices) {
-        // 85: length of Discord Link
+    for (i in links.indices) { // 85: length of Discord Link
         val index = this.indexOf(links[i], i * 85)
         when (index) {
             0 -> list.add(true) // prev char doesn't exist

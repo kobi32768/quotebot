@@ -1,0 +1,24 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <JetCodeStyleSettings>
+      <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
+      <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
+    </JetCodeStyleSettings>
+    <codeStyleSettings language="kotlin">
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
+      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+      <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
+      <option name="METHOD_ANNOTATION_WRAP" value="5" />
+      <option name="CLASS_ANNOTATION_WRAP" value="5" />
+      <option name="FIELD_ANNOTATION_WRAP" value="5" />
+      <option name="PARAMETER_ANNOTATION_WRAP" value="5" />
+      <option name="VARIABLE_ANNOTATION_WRAP" value="5" />
+      <option name="ENUM_CONSTANTS_WRAP" value="2" />
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+  </code_scheme>
+</component>

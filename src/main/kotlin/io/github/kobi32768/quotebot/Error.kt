@@ -1,7 +1,9 @@
 package io.github.kobi32768.quotebot
 
-enum class Error(    title_ja: String,     description_ja: String,
-                 val title_en: String, val description_en: String, ) {
+enum class Error(
+    title_ja: String, description_ja: String,
+    val title_en: String, val description_en: String,
+) {
     NOT_EXIST(
         "存在しないメッセージ",
         "`Quote Bot`が参加していないサーバーからの引用の可能性があります。",
@@ -45,6 +47,6 @@ enum class Error(    title_ja: String,     description_ja: String,
         "You don't have the required permissions to force quoting."
     );
 
-    val title       = title_ja
+    val title = title_ja
     val description = description_ja
 }

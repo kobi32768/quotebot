@@ -13,8 +13,7 @@ fun MessageReceivedEvent.sendMessage(message: String) {
 }
 
 fun MessageReceivedEvent.sendErrorMessage(error: Error) {
-    val text = "**${error.title}**\n" +
-            error.description
+    val text = "**${error.title}**\n" + error.description
     this.sendMessage(text)
 }
 
@@ -41,7 +40,8 @@ fun forceQuote(data: MessageData, foundMembers: List<Member>) {
     if (member != null) {
         if (member.hasPermission(channel, Permission.MANAGE_CHANNEL) ||
             member.hasPermission(channel, Permission.MESSAGE_MANAGE) ||
-            member.hasPermission(Permission.ADMINISTRATOR)) {
+            member.hasPermission(Permission.ADMINISTRATOR)
+        ) {
             sendRegularEmbedMessage(data)
             printlog("Successfully referenced", State.SUCCESS, true, data)
             return
@@ -68,8 +68,7 @@ fun sendRegularEmbedMessage(data: MessageData) {
     val event = data.event
     val member = try {
         data.guild.retrieveMember(data.message.author).submit().get()
-    }
-    catch (ex: ExecutionException) { // Member has already left
+    } catch (ex: ExecutionException) { // Member has already left
         null
     }
 
@@ -82,9 +81,8 @@ fun sendRegularEmbedMessage(data: MessageData) {
     embed.setAuthor(
         member?.effectiveName ?: message.author.name,
         null,
-        message.author.effectiveAvatarUrl)
+        message.author.effectiveAvatarUrl
+    )
 
-    event.channel
-        .sendMessage(embed.build())
-        .queue()
+    event.channel.sendMessage(embed.build()).queue()
 }
