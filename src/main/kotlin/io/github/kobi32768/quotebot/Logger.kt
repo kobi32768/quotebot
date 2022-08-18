@@ -33,8 +33,7 @@ fun printlog(message: String, state: State, useForce: Boolean = false, data: Mes
 private fun writeLogFile(text: String) {
     val filename = File("log/latest.txt").readText()
 
-    File("log/$filename.txt")
-        .appendText("$text\n")
+    File("log/$filename.txt").appendText("$text\n")
 }
 
 fun makeLogFile() {
@@ -42,10 +41,8 @@ fun makeLogFile() {
     val time = LocalDateTime.now().format(formatter)
 
     printlog("Log file created: $time", State.INFORMATION)
-    File("log/$time.txt")
-        .createNewFile()
+    File("log/$time.txt").createNewFile()
 
     // overwrite
-    File("log/latest.txt")
-        .writeText(time)
+    File("log/latest.txt").writeText(time)
 }

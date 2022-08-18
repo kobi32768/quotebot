@@ -6,23 +6,16 @@ fun String.isContain(substring: String): Boolean {
     return this.indexOf(substring) >= 0
 }
 
-fun String.isContainOr(vararg substring: String): Boolean {
-    // foreach もどき
-    return substring.indices.any { i: Int ->
-        this.isContain(substring[i])
-    }
+fun String.isContainOr(vararg substring: String): Boolean { // foreach もどき
+    return substring.indices.any { i: Int -> this.isContain(substring[i]) }
 }
 
 fun List<String>.isContainOr(vararg substring: String): Boolean {
-    return substring.indices.any { i: Int ->
-        this.contains(substring[i])
-    }
+    return substring.indices.any { i: Int -> this.contains(substring[i]) }
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
-    return this.message.contentDisplay
-        .split(' ')
-        .isContainOr("-f", "--force")
+    return this.message.contentDisplay.split(' ').isContainOr("-f", "--force")
 }
 
 fun printlnf(text: String, vararg args: String) {
