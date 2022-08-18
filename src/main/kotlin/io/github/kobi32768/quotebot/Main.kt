@@ -9,9 +9,8 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import java.util.*
-import javax.security.auth.login.LoginException
-import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
+import javax.security.auth.login.LoginException
 
 fun main() {
     QuoteBot().start()
@@ -45,7 +44,10 @@ class QuoteBot : ListenerAdapter() {
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay.lowercase(Locale.getDefault())
             .replace("https://discordapp.com/channels/", prefix) // old to new
-            .replace("https://ptb.discord.com/channels/", prefix) // ptb to general
+            // prerelease versions
+            // see https://support.discord.com/hc/articles/360035675191-Discord-Testing-Clients
+            .replace("https://ptb.discord.com/channels/", prefix)
+            .replace("https://canary.discord.com/channels/", prefix)
 
         // Command
         if (content.startsWith("!quote")) {
