@@ -8,7 +8,7 @@ application {
 }
 
 group   = "io.github.kobi32768"
-version = File("./src/main/resources/version.txt").readText()
+version = file("src/main/resources/version.txt").readText()
 
 val jar by tasks.getting(Jar::class) {
     manifest {
