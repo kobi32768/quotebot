@@ -20,11 +20,13 @@ class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
             JDABuilder.createDefault(
-                    this.javaClass.classLoader.getResourceAsStream("token.txt")!!
-                            .reader()
-                            .readText()
-                            .trim()
-            ).enableIntents(GatewayIntent.MESSAGE_CONTENT).addEventListeners(this).build()
+                this.javaClass.classLoader.getResourceAsStream("token.txt")!!
+                    .reader()
+                    .readText()
+                    .trim()
+            ).enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .addEventListeners(this)
+                .build()
         } catch (ex: LoginException) {
             ex.printStackTrace()
         } catch (ex: InterruptedException) {
@@ -40,15 +42,15 @@ class QuoteBot : ListenerAdapter() {
 
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay.lowercase(Locale.getDefault())
-                .replace("https://discordapp.com/channels/", prefix) // old to new
+            .replace("https://discordapp.com/channels/", prefix) // old to new
 
         // Command
         if (content.startsWith("!quote")) {
             val commands = content.split(' ')
             val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
-                    .reader()
-                    .readText()
-                    .trim()
+                .reader()
+                .readText()
+                .trim()
 
             if (commands.isContainOr("-v", "--version")) {
                 event.sendMessage("**Version: ** $version")
@@ -98,12 +100,7 @@ class QuoteBot : ListenerAdapter() {
                         printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                     } else {
                         event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog(
-                                "Need more permissions to force quoting.",
-                                State.FAILED,
-                                false,
-                                quotedData
-                        )
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
                     }
                 } else {
                     printlog("Quote from NSFW channel", State.FORBIDDEN)
@@ -116,18 +113,11 @@ class QuoteBot : ListenerAdapter() {
                         printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                     } else {
                         event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog(
-                                "Need more permissions to force quoting.",
-                                State.FAILED,
-                                false,
-                                quotedData
-                        )
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
                     }
                 } else {
                     event.sendErrorMessage(Error.FORBIDDEN)
-                    printlog(
-                            "@everyone doesn't have permission", State.FORBIDDEN, false, quotedData
-                    )
+                    printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
                 }
             } else if (quotedData.isSameGuild()) {
                 sendRegularEmbedMessage(quotedData)
@@ -139,12 +129,7 @@ class QuoteBot : ListenerAdapter() {
                         printlog("Successfully referenced", State.SUCCESS, true, quotedData)
                     } else {
                         event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog(
-                                "Need more permissions to force quoting.",
-                                State.FAILED,
-                                false,
-                                quotedData
-                        )
+                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
                     }
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)

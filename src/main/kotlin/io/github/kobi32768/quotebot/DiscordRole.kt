@@ -17,11 +17,8 @@ private fun TextChannel.isRoleAllowed(role: Role, permission: Permission): Boole
 
     // Return default when not overridden
     return if (index != -1) {
-        overrides[index].allowed.contains(permission) || (overrides[index].inherit.contains(
-                permission
-        ) && role.permissions.contains(
-                permission
-        ))
+        overrides[index].allowed.contains(permission) ||
+            (overrides[index].inherit.contains(permission) && role.permissions.contains(permission))
     } else {
         role.permissions.contains(permission)
     }

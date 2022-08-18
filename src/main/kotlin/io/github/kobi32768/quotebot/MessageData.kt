@@ -9,5 +9,5 @@ data class MessageData(
     var event: MessageReceivedEvent,
     val guild: Guild,
     val channel: TextChannel,
-    val message: Message,
+    val message: Message
 )

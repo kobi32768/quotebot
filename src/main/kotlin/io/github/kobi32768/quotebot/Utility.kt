@@ -7,15 +7,11 @@ fun String.isContain(substring: String): Boolean {
 }
 
 fun String.isContainOr(vararg substring: String): Boolean { // foreach もどき
-    return substring.indices.any { i: Int ->
-        this.isContain(substring[i])
-    }
+    return substring.indices.any { i: Int -> this.isContain(substring[i]) }
 }
 
 fun List<String>.isContainOr(vararg substring: String): Boolean {
-    return substring.indices.any { i: Int ->
-        this.contains(substring[i])
-    }
+    return substring.indices.any { i: Int -> this.contains(substring[i]) }
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
