@@ -43,6 +43,8 @@ class QuoteBot : ListenerAdapter() {
 
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay.lowercase(Locale.getDefault())
+            // Discord was at https://discordapp.com.
+            // see https://support.discord.com/hc/articles/360042987951-Discordapp-com-is-now-Discord-com
             .replace("https://discordapp.com/channels/", prefix) // old to new
             // prerelease versions
             // see https://support.discord.com/hc/articles/360035675191-Discord-Testing-Clients
