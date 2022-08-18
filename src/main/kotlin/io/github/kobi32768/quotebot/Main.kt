@@ -9,8 +9,9 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import java.util.*
-import java.util.concurrent.ExecutionException
 import javax.security.auth.login.LoginException
+import java.lang.NullPointerException
+import java.util.concurrent.ExecutionException
 
 fun main() {
     QuoteBot().start()
@@ -24,8 +25,9 @@ class QuoteBot : ListenerAdapter() {
                     .reader()
                     .readText()
                     .trim()
-            ).enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                .addEventListeners(this)
+            ).addEventListeners(this)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build()
         } catch (ex: LoginException) {
             ex.printStackTrace()
@@ -43,6 +45,7 @@ class QuoteBot : ListenerAdapter() {
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay.lowercase(Locale.getDefault())
             .replace("https://discordapp.com/channels/", prefix) // old to new
+            .replace("https://ptb.discord.com/channels/", prefix) // ptb to general
 
         // Command
         if (content.startsWith("!quote")) {
@@ -95,26 +98,14 @@ class QuoteBot : ListenerAdapter() {
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
             } else if (quotedChannel.isNSFW) {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     printlog("Quote from NSFW channel", State.FORBIDDEN)
                     event.sendErrorMessage(Error.NSFW)
                 }
             } else if (!quotedData.isEveryoneViewable()) {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     event.sendErrorMessage(Error.FORBIDDEN)
                     printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
@@ -124,13 +115,7 @@ class QuoteBot : ListenerAdapter() {
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
             } else {
                 if (event.isForce()) {
-                    if (quotedData.isForceQuotable()) {
-                        sendRegularEmbedMessage(quotedData)
-                        printlog("Successfully referenced", State.SUCCESS, true, quotedData)
-                    } else {
-                        event.sendErrorMessage(Error.FORCE_FAILED)
-                        printlog("Need more permissions to force quoting.", State.FAILED, false, quotedData)
-                    }
+                    quotedData.callForceQuote()
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)
                     printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
