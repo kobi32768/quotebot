@@ -20,12 +20,8 @@ fun main() {
 class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
-            JDABuilder.createDefault(
-                this.javaClass.classLoader.getResourceAsStream("token.txt")!!
-                    .reader()
-                    .readText()
-                    .trim()
-            ).addEventListeners(this)
+            val token = java.io.File("token.txt").reader().readText().trim()
+            JDABuilder.createDefault(token).addEventListeners(this)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build()
