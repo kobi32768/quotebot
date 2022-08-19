@@ -2,8 +2,8 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -77,12 +77,12 @@ class QuoteBot : ListenerAdapter() {
 
             // Pre-define
             val quotedGuild: Guild
-            val quotedChannel: TextChannel
+            val quotedChannel: GuildMessageChannel
             val quotedMessage: Message
 
             try {
                 quotedGuild = event.jda.getGuildById(ids[i])!!
-                quotedChannel = quotedGuild.getTextChannelById(ids[i + 1])!!
+                quotedChannel = quotedGuild.getQuotableChannelById(ids[i + 1])!!
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
@@ -100,7 +100,7 @@ class QuoteBot : ListenerAdapter() {
             if (quotedData.isSameChannel()) {
                 sendRegularEmbedMessage(quotedData)
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else if (quotedChannel.isNSFW) {
+            } else if (quotedChannel.isNSFW()) {
                 if (event.isForce()) {
                     quotedData.callForceQuote()
                 } else {
