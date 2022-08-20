@@ -15,14 +15,8 @@ fun Guild.getQuotableChannelById(id: String): GuildMessageChannel? {
 
 tailrec fun GuildChannel.isNSFW(): Boolean {
     return when (this) {
-        is IAgeRestrictedChannel -> {
-            this.isNSFW
-        }
-        is ThreadChannel -> {
-            this.parentChannel.isNSFW()
-        }
-        else -> {
-            false
-        }
+        is IAgeRestrictedChannel -> this.isNSFW
+        is ThreadChannel -> this.parentChannel.isNSFW()
+        else -> false
     }
 }
