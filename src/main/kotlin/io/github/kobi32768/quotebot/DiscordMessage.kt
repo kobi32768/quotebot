@@ -64,19 +64,13 @@ fun createEmbedTitle(data: MessageData): String {
     val channel = (thread?.parentChannel ?: data.channel) as ICategorizableChannel
     val category = channel.parentCategory
 
-    return if (category != null) {
-        if (thread != null) {
-            "from: ${category.name} / ${channel.name} / ${thread.name} (${guild.name})"
-        } else {
-            "from: ${category.name} / ${channel.name} (${guild.name})"
-        }
-    } else {
-        if (thread != null) {
-            "from: ${channel.name} / ${thread.name} (${guild.name})"
-        } else {
-            "from: ${channel.name} (${guild.name})"
-        }
-    }
+    var title = "from: "
+    if (category != null) title += "${category.name} / "
+    title += channel.name
+    if (thread != null) title += " / ${thread.name}"
+    title += " (${guild.name})"
+
+    return title
 }
 
 fun sendRegularEmbedMessage(data: MessageData) {
