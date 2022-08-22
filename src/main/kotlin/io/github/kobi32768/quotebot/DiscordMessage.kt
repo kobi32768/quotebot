@@ -3,7 +3,9 @@ package io.github.kobi32768.quotebot
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
+import net.dv8tion.jda.api.entities.ICategorizableChannel
 import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.ThreadChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.awt.Color
 import java.util.concurrent.ExecutionException
@@ -22,7 +24,7 @@ fun MessageData.isSameGuild(): Boolean {
 }
 
 fun MessageData.isSameChannel(): Boolean {
-    return this.event.channelType != ChannelType.PRIVATE && this.channel == this.event.channel
+    return this.channel.type == this.event.channelType && this.channel == this.event.channel
 }
 
 fun MessageData.callForceQuote() {
@@ -54,13 +56,21 @@ fun forceQuote(data: MessageData, foundMembers: List<Member>) {
 
 fun createEmbedTitle(data: MessageData): String {
     val guild = data.guild
-    val channel = data.channel
+    val thread = if (data.channel is ThreadChannel) {
+        data.channel
+    } else {
+        null
+    }
+    val channel = (thread?.parentChannel ?: data.channel) as ICategorizableChannel
     val category = channel.parentCategory
 
-    return if (category != null)
-        "from: ${category.name} / ${channel.name} (${guild.name})"
-    else
-        "from: ${channel.name} (${guild.name})"
+    var title = "from: "
+    if (category != null) title += "${category.name} / "
+    title += channel.name
+    if (thread != null) title += " / ${thread.name}"
+    title += " (${guild.name})"
+
+    return title
 }
 
 fun sendRegularEmbedMessage(data: MessageData) {
