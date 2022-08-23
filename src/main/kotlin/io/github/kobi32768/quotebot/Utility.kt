@@ -25,12 +25,10 @@ fun printlnf(text: String, vararg args: String) {
 fun compress64(id: String): String {
     val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     var id10 = id.toLong()
-    var id64 = ""
-
-    while (id10 / 64 != 0L) {
-        id64 = chars[(id10 % 64).toInt()] + id64
-        id10 /= 64
+    return buildString {
+        while (id10 / 64 != 0L) {
+            append(chars[(id10 % 64).toInt()])
+            id10 /= 64
+        }
     }
-
-    return id64
 }
