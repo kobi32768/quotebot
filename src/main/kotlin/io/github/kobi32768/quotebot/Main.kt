@@ -59,7 +59,7 @@ class QuoteBot : ListenerAdapter() {
                 .readText()
                 .trim()
 
-            if (commands.isContainOr("-v", "--version")) {
+            if (commands.containsAny("-v", "--version")) {
                 event.sendMessage("**Version: ** $version")
                 printlog("Displayed version ($version)", State.INFORMATION)
             }

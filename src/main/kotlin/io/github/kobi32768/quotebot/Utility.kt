@@ -2,12 +2,12 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-fun List<String>.isContainOr(vararg substring: String): Boolean {
+fun List<String>.containsAny(vararg substring: String): Boolean {
     return substring.any { this.contains(it) }
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
-    return this.message.contentDisplay.split(' ').isContainOr("-f", "--force")
+    return this.message.contentDisplay.split(' ').containsAny("-f", "--force")
 }
 
 fun printlnf(text: String, vararg args: String) {
