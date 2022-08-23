@@ -73,6 +73,7 @@ Make shell script for bot starting
 
 latest=`ls -drt /home/<user>/quotebot/*/ | tail -n 1`
 cd $latest
+export DISCORD_TOKEN="<YOUR-DISCORD-TOKEN-HERE>"
 ./bin/quotebot
 ```
 
