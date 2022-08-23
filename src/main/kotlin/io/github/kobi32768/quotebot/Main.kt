@@ -1,5 +1,6 @@
 package io.github.kobi32768.quotebot
 
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
@@ -39,6 +40,17 @@ class QuoteBot : ListenerAdapter() {
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        startCoroutine {
+            try {
+                onMessageReceivedSuspendable(event)
+            } catch (t: Throwable) {
+                printlog("unhandled exception: $t", State.EXCEPTION)
+                t.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun onMessageReceivedSuspendable(event: MessageReceivedEvent) {
         if (event.author.isBot) return
 
         val prefix = "https://discord.com/channels/"
@@ -83,7 +95,7 @@ class QuoteBot : ListenerAdapter() {
             try {
                 quotedGuild = event.jda.getGuildById(ids[i])!!
                 quotedChannel = quotedGuild.getQuotableChannelById(ids[i + 1])!!
-                quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
+                quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().await()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.NOT_EXIST); return
