@@ -68,8 +68,7 @@ class QuoteBot : ListenerAdapter() {
         // Quote
         if (prefix !in content) return
 
-        val ids = content.extractIDs(event.isForce())
-        for (i in ids.indices step 3) {
+        for ((guildId, channelId, messageId) in content.extractIDs(event.isForce())) {
 
             // Pre-define
             val quotedGuild: Guild
@@ -77,9 +76,9 @@ class QuoteBot : ListenerAdapter() {
             val quotedMessage: Message
 
             try {
-                quotedGuild = event.jda.getGuildById(ids[i])!!
-                quotedChannel = quotedGuild.getQuotableChannelById(ids[i + 1])!!
-                quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
+                quotedGuild = event.jda.getGuildById(guildId)!!
+                quotedChannel = quotedGuild.getQuotableChannelById(channelId)!!
+                quotedMessage = quotedChannel.retrieveMessageById(messageId).submit().get()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.NOT_EXIST); return

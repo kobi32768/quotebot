@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.ThreadChannel
 import net.dv8tion.jda.api.entities.channel.attribute.IAgeRestrictedChannel
 
-fun Guild.getQuotableChannelById(id: String): GuildMessageChannel? {
+fun Guild.getQuotableChannelById(id: Long): GuildMessageChannel? {
     return this.getTextChannelById(id)
         ?: this.getVoiceChannelById(id)
         ?: this.getThreadChannelById(id)
