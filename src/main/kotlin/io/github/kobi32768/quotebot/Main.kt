@@ -20,7 +20,7 @@ fun main() {
 class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
-            val token = java.io.File("token.txt").reader().readText().trim()
+            val token = System.getenv("DISCORD_TOKEN")
             JDABuilder.createDefault(token).addEventListeners(this)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
