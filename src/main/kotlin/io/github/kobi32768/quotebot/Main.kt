@@ -66,14 +66,10 @@ class QuoteBot : ListenerAdapter() {
         // Command
         if (content.startsWith("!quote")) {
             val commands = content.split(' ')
-            val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
-                .reader()
-                .readText()
-                .trim()
 
             if (commands.isContainOr("-v", "--version")) {
-                event.sendMessage("**Version: ** $version")
-                printlog("Displayed version ($version)", State.INFORMATION)
+                event.sendMessage("**Version: ** ${VersionHolder.version}")
+                printlog("Displayed version (${VersionHolder.version})", State.INFORMATION)
             }
         }
 
@@ -138,5 +134,15 @@ class QuoteBot : ListenerAdapter() {
                 }
             }
         }
+    }
+
+    /**
+     * The class holds version of this bot. use an individual object for lazy init.
+     */
+    private object VersionHolder {
+        val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
+            .reader()
+            .readText()
+            .trim()
     }
 }
