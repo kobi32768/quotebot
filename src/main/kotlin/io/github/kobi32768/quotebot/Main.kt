@@ -68,12 +68,8 @@ class QuoteBot : ListenerAdapter() {
         // Quote
         if (prefix !in content) return
 
-        val ids = content.extractIDs()
+        val ids = content.extractIDs(event.isForce())
         for (i in ids.indices step 3) {
-            if (!content.areValidLinks()[i / 3] && !event.isForce()) {
-                printlog("Invalid Link", State.INVALID)
-                continue
-            }
 
             // Pre-define
             val quotedGuild: Guild
