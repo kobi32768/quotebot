@@ -2,14 +2,6 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-fun String.isContain(substring: String): Boolean {
-    return this.indexOf(substring) >= 0
-}
-
-fun String.isContainOr(vararg substring: String): Boolean { // foreach もどき
-    return substring.any { this.isContain(it) }
-}
-
 fun List<String>.isContainOr(vararg substring: String): Boolean {
     return substring.any { this.contains(it) }
 }

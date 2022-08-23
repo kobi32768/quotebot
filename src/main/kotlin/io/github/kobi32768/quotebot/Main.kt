@@ -66,7 +66,7 @@ class QuoteBot : ListenerAdapter() {
         }
 
         // Quote
-        if (!content.isContain(prefix)) return
+        if (prefix !in content) return
 
         val ids = content.extractIDs()
         for (i in ids.indices step 3) {
