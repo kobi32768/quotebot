@@ -6,9 +6,9 @@ enum class Error(
 ) {
     NOT_EXIST(
         "存在しないメッセージ",
-        "`Quote Bot`が参加していないサーバーからの引用の可能性があります。",
+        "`Quote Bot`が参加していないサーバーからの引用、あるいは、アーカイブされたスレッドからの引用の可能性があります。",
         "Message that not exist",
-        "It's possible that the quotation is from a server that Quote Bot cannot see."
+        "It's possible that the quotation is from a server that Quote Bot cannot see, or from an archived thread."
     ),
     NOT_EXIST_MSG(
         "存在しないメッセージ",

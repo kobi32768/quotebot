@@ -2,16 +2,15 @@ package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import java.util.*
-import javax.security.auth.login.LoginException
-import java.lang.NullPointerException
 import java.util.concurrent.ExecutionException
+import javax.security.auth.login.LoginException
 
 fun main() {
     QuoteBot().start()
@@ -40,8 +39,13 @@ class QuoteBot : ListenerAdapter() {
 
         val prefix = "https://discord.com/channels/"
         val content = event.message.contentDisplay.lowercase(Locale.getDefault())
+            // Discord was at https://discordapp.com.
+            // see https://support.discord.com/hc/articles/360042987951-Discordapp-com-is-now-Discord-com
             .replace("https://discordapp.com/channels/", prefix) // old to new
-            .replace("https://ptb.discord.com/channels/", prefix) // ptb to general
+            // prerelease versions
+            // see https://support.discord.com/hc/articles/360035675191-Discord-Testing-Clients
+            .replace("https://ptb.discord.com/channels/", prefix)
+            .replace("https://canary.discord.com/channels/", prefix)
 
         // Command
         if (content.startsWith("!quote")) {
@@ -69,12 +73,12 @@ class QuoteBot : ListenerAdapter() {
 
             // Pre-define
             val quotedGuild: Guild
-            val quotedChannel: TextChannel
+            val quotedChannel: GuildMessageChannel
             val quotedMessage: Message
 
             try {
                 quotedGuild = event.jda.getGuildById(ids[i])!!
-                quotedChannel = quotedGuild.getTextChannelById(ids[i + 1])!!
+                quotedChannel = quotedGuild.getQuotableChannelById(ids[i + 1])!!
                 quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().get()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
@@ -92,7 +96,7 @@ class QuoteBot : ListenerAdapter() {
             if (quotedData.isSameChannel()) {
                 sendRegularEmbedMessage(quotedData)
                 printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else if (quotedChannel.isNSFW) {
+            } else if (quotedChannel.isNSFW()) {
                 if (event.isForce()) {
                     quotedData.callForceQuote()
                 } else {

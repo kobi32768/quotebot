@@ -1,8 +1,8 @@
 package io.github.kobi32768.quotebot
 
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Role
-import net.dv8tion.jda.api.entities.TextChannel
 
 fun MessageData.isEveryoneViewable(): Boolean {
     val channel = this.channel
@@ -11,8 +11,8 @@ fun MessageData.isEveryoneViewable(): Boolean {
     return channel.isRoleAllowed(everyone, Permission.VIEW_CHANNEL)
 }
 
-private fun TextChannel.isRoleAllowed(role: Role, permission: Permission): Boolean {
-    val overrides = this.rolePermissionOverrides
+private fun GuildMessageChannel.isRoleAllowed(role: Role, permission: Permission): Boolean {
+    val overrides = this.permissionContainer.rolePermissionOverrides
     val index = this.getRoleIndex(role)
 
     // Return default when not overridden
@@ -24,6 +24,6 @@ private fun TextChannel.isRoleAllowed(role: Role, permission: Permission): Boole
     }
 }
 
-private fun TextChannel.getRoleIndex(role: Role): Int {
-    return this.rolePermissionOverrides.map { it.role }.indexOf(role)
+private fun GuildMessageChannel.getRoleIndex(role: Role): Int {
+    return this.permissionContainer.rolePermissionOverrides.map { it.role }.indexOf(role)
 }
