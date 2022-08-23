@@ -92,29 +92,21 @@ class QuoteBot : ListenerAdapter() {
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 
-            if (quotedData.isSameChannel()) {
-                sendRegularEmbedMessage(quotedData)
-                printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else if (quotedChannel.isNSFW()) {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
-                } else {
+            if (event.isForce()) {
+                quotedData.callForceQuote()
+            } else {
+                if (quotedData.isSameChannel()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, false, quotedData)
+                } else if (quotedChannel.isNSFW()) {
                     printlog("Quote from NSFW channel", State.FORBIDDEN)
                     event.sendErrorMessage(Error.NSFW)
-                }
-            } else if (!quotedData.isEveryoneViewable()) {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
-                } else {
+                } else if (!quotedData.isEveryoneViewable()) {
                     event.sendErrorMessage(Error.FORBIDDEN)
                     printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
-                }
-            } else if (quotedData.isSameGuild()) {
-                sendRegularEmbedMessage(quotedData)
-                printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
+                } else if (quotedData.isSameGuild()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, false, quotedData)
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)
                     printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
