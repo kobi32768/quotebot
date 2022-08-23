@@ -10,10 +10,6 @@ fun MessageReceivedEvent.isForce(): Boolean {
     return this.message.contentDisplay.split(' ').containsAny("-f", "--force")
 }
 
-fun printlnf(text: String, vararg args: String) {
-    println(text.format(args))
-}
-
 fun compress64(id: String): String {
     val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     var id10 = id.toLong()
