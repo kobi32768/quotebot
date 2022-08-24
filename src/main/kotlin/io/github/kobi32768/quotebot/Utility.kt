@@ -18,5 +18,6 @@ fun compress64(id: String): String {
             append(chars[(id10 % 64).toInt()])
             id10 /= 64
         }
+        reverse()
     }
 }
