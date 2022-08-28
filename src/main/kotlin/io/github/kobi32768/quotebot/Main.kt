@@ -22,7 +22,10 @@ class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
             JDABuilder.createDefault(
-                "NzA2MzA1MTQxODgzNjY2NTQ2.Gos46O.1s3H7F-V2tzyDcYJScsdtubELI915Nf5Hf4o9o"
+                this.javaClass.classLoader.getResourceAsStream("token.txt")!!
+                    .reader()
+                    .readText()
+                    .trim()
             ).addEventListeners(this)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
