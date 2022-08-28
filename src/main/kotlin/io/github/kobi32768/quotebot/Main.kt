@@ -22,10 +22,7 @@ class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
             JDABuilder.createDefault(
-                this.javaClass.classLoader.getResourceAsStream("token.txt")!!
-                    .reader()
-                    .readText()
-                    .trim()
+                "NzA2MzA1MTQxODgzNjY2NTQ2.Gos46O.1s3H7F-V2tzyDcYJScsdtubELI915Nf5Hf4o9o"
             ).addEventListeners(this)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
@@ -98,7 +95,7 @@ class QuoteBot : ListenerAdapter() {
                 event.sendErrorMessage(Error.NOT_EXIST); return
             } catch (ex: ErrorResponseException) {
                 // see https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes
-                if (ex.errorCode == 10007) {
+                if (ex.errorCode == 10008) {
                     printlog("Message Not Exists error response", State.EXCEPTION)
                     event.sendErrorMessage(Error.NOT_EXIST_MSG); return
                 } else {
