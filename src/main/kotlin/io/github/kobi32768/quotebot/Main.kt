@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -95,9 +96,15 @@ class QuoteBot : ListenerAdapter() {
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.NOT_EXIST); return
-            } catch (ex: ExecutionException) {
-                printlog("Execution Exception", State.EXCEPTION)
-                event.sendErrorMessage(Error.NOT_EXIST_MSG); return
+            } catch (ex: ErrorResponseException) {
+                // see https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes
+                if (ex.errorCode == 10007) {
+                    printlog("Message Not Exists error response", State.EXCEPTION)
+                    event.sendErrorMessage(Error.NOT_EXIST_MSG); return
+                } else {
+                    printlog("Unexpected Error Response: $ex", State.EXCEPTION)
+                    event.sendErrorMessage(Error.UNEXPECTED_ERROR); return
+                }
             } catch (ex: InsufficientPermissionException) {
                 printlog("Insufficient Permission Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.CANNOT_REF); return

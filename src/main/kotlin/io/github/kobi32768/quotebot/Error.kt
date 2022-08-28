@@ -45,7 +45,14 @@ enum class Error(
         "Forceオプションを使用するために必要な権限がありません。",
         "You need more permissions",
         "You don't have the required permissions to force quoting."
-    );
+    ),
+    UNEXPECTED_ERROR(
+        "不明なエラー",
+        "不明なエラーが発生しました。ログを参照してください",
+        "Unexpected Error",
+        "Unexpected error has occurred. see Log for info."
+    ),
+    ;
 
     val title = title_ja
     val description = description_ja
