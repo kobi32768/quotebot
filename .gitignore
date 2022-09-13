@@ -6,5 +6,17 @@
 /out/
 /log/
 
+# IDEA configurations Automatically generated based on gradle.
+modules.xml
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/modules
+.idea/**/gradle.xml
+.idea/**/libraries
+# IDEA local java configuration
+.idea/misc.xml
+
 # Files
 token.txt
