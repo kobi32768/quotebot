@@ -1,30 +1,22 @@
 package io.github.kobi32768.quotebot
 
-private fun String.extractLinks(): List<String> {
-    return Regex("""https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""")
+private val linkRegexWithValidCheck = Regex("""(?<!\\)https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""")
+private val linkRegexWithoutValidCheck = Regex("""https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""")
+
+private fun String.extractLinks(force: Boolean): Sequence<String> {
+    return (if (force) linkRegexWithoutValidCheck else linkRegexWithValidCheck)
         .findAll(this)
         .map { it.value }
-        .toList()
 }
 
-fun String.extractIDs(): List<String> {
-    return this.extractLinks()
-        .joinToString(separator = "")
-        .replace("https://discord.com/channels", "")
-        .split("/")
-        .drop(1)
-}
-
-fun String.areValidLinks(): List<Boolean> {
-    val list = mutableListOf<Boolean>()
-    val links = this.extractLinks()
-
-    for (i in links.indices) { // 85: length of Discord Link
-        val index = this.indexOf(links[i], i * 85)
-        when (index) {
-            0 -> list.add(true) // prev char doesn't exist
-            else -> list.add(this[index - 1] != '\\')
-        }
+fun String.extractIDs(force: Boolean): Sequence<MessageLink> = this.extractLinks(force)
+    .map { link ->
+        val (guildId, channelId, messageId) = link.removePrefix("https://discord.com/channels/").split('/')
+        MessageLink(guildId.toLong(), channelId.toLong(), messageId.toLong())
     }
-    return list
-}
+
+data class MessageLink(
+    val guildId: Long,
+    val channelId: Long,
+    val messageId: Long,
+)
