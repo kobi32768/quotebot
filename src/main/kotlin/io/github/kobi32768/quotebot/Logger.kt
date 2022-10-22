@@ -40,9 +40,9 @@ fun makeLogFile() {
     val formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")
     val time = LocalDateTime.now().format(formatter)
 
-    printlog("Log file created: $time", State.INFORMATION)
+    File("log").mkdir()
     File("log/$time.txt").createNewFile()
+    File("log/latest.txt").writeText(time) // overwrite
 
-    // overwrite
-    File("log/latest.txt").writeText(time)
+    printlog("Log file created: $time", State.INFORMATION)
 }

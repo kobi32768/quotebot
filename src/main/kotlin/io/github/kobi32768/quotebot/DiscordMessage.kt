@@ -35,7 +35,7 @@ suspend fun MessageData.callForceQuote() {
 }
 
 suspend fun forceQuote(data: MessageData, foundMembers: List<Member>) {
-    val member = foundMembers.getOrNull(0) // size might be 0 or 1
+    val member = foundMembers.singleOrNull()
     val channel = data.channel
 
     if (member != null) {

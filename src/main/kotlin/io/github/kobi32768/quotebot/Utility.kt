@@ -11,37 +11,24 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.intrinsics.startCoroutineUninterceptedOrReturn
 
-fun String.isContain(substring: String): Boolean {
-    return this.indexOf(substring) >= 0
-}
-
-fun String.isContainOr(vararg substring: String): Boolean { // foreach もどき
-    return substring.indices.any { i: Int -> this.isContain(substring[i]) }
-}
-
-fun List<String>.isContainOr(vararg substring: String): Boolean {
-    return substring.indices.any { i: Int -> this.contains(substring[i]) }
+fun List<String>.containsAny(vararg substring: String): Boolean {
+    return substring.any { this.contains(it) }
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
-    return this.message.contentDisplay.split(' ').isContainOr("-f", "--force")
-}
-
-fun printlnf(text: String, vararg args: String) {
-    println(text.format(args))
+    return this.message.contentDisplay.split(' ').containsAny("-f", "--force")
 }
 
 fun compress64(id: String): String {
     val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     var id10 = id.toLong()
-    var id64 = ""
-
-    while (id10 / 64 != 0L) {
-        id64 = chars[(id10 % 64).toInt()] + id64
-        id10 /= 64
+    return buildString {
+        while (id10 / 64 != 0L) {
+            append(chars[(id10 % 64).toInt()])
+            id10 /= 64
+        }
+        reverse()
     }
-
-    return id64
 }
 
 /**

@@ -21,12 +21,8 @@ fun main() {
 class QuoteBot : ListenerAdapter() {
     fun start() {
         try {
-            JDABuilder.createDefault(
-                this.javaClass.classLoader.getResourceAsStream("token.txt")!!
-                    .reader()
-                    .readText()
-                    .trim()
-            ).addEventListeners(this)
+            val token = System.getenv("DISCORD_TOKEN")
+            JDABuilder.createDefault(token).addEventListeners(this)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build()
@@ -68,21 +64,16 @@ class QuoteBot : ListenerAdapter() {
         if (content.startsWith("!quote")) {
             val commands = content.split(' ')
 
-            if (commands.isContainOr("-v", "--version")) {
+            if (commands.containsAny("-v", "--version")) {
                 event.sendMessage("**Version: ** ${VersionHolder.version}")
                 printlog("Displayed version (${VersionHolder.version})", State.INFORMATION)
             }
         }
 
         // Quote
-        if (!content.isContain(prefix)) return
+        if (prefix !in content) return
 
-        val ids = content.extractIDs()
-        for (i in ids.indices step 3) {
-            if (!content.areValidLinks()[i / 3] && !event.isForce()) {
-                printlog("Invalid Link", State.INVALID)
-                continue
-            }
+        for ((guildId, channelId, messageId) in content.extractIDs(event.isForce())) {
 
             // Pre-define
             val quotedGuild: Guild
@@ -90,9 +81,9 @@ class QuoteBot : ListenerAdapter() {
             val quotedMessage: Message
 
             try {
-                quotedGuild = event.jda.getGuildById(ids[i])!!
-                quotedChannel = quotedGuild.getQuotableChannelById(ids[i + 1])!!
-                quotedMessage = quotedChannel.retrieveMessageById(ids[i + 2]).submit().await()
+                quotedGuild = event.jda.getGuildById(guildId)!!
+                quotedChannel = quotedGuild.getQuotableChannelById(channelId])!!
+                quotedMessage = quotedChannel.retrieveMessageById(messageId).submit().await()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.NOT_EXIST); return
@@ -112,29 +103,21 @@ class QuoteBot : ListenerAdapter() {
 
             val quotedData = MessageData(event, quotedGuild, quotedChannel, quotedMessage)
 
-            if (quotedData.isSameChannel()) {
-                sendRegularEmbedMessage(quotedData)
-                printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else if (quotedChannel.isNSFW()) {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
-                } else {
+            if (event.isForce()) {
+                quotedData.callForceQuote()
+            } else {
+                if (quotedData.isSameChannel()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, false, quotedData)
+                } else if (quotedChannel.isNSFW()) {
                     printlog("Quote from NSFW channel", State.FORBIDDEN)
                     event.sendErrorMessage(Error.NSFW)
-                }
-            } else if (!quotedData.isEveryoneViewable()) {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
-                } else {
+                } else if (!quotedData.isEveryoneViewable()) {
                     event.sendErrorMessage(Error.FORBIDDEN)
                     printlog("@everyone doesn't have permission", State.FORBIDDEN, false, quotedData)
-                }
-            } else if (quotedData.isSameGuild()) {
-                sendRegularEmbedMessage(quotedData)
-                printlog("Successfully referenced", State.SUCCESS, false, quotedData)
-            } else {
-                if (event.isForce()) {
-                    quotedData.callForceQuote()
+                } else if (quotedData.isSameGuild()) {
+                    sendRegularEmbedMessage(quotedData)
+                    printlog("Successfully referenced", State.SUCCESS, false, quotedData)
                 } else {
                     event.sendErrorMessage(Error.CROSS_GUILD)
                     printlog("Cross-Guild", State.FORBIDDEN, false, quotedData)
