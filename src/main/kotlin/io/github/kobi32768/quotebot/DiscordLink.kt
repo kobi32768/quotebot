@@ -1,6 +1,6 @@
 package io.github.kobi32768.quotebot
 
-private val linkRegexWithValidCheck = Regex("""(?<!\\)https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""")
+private val linkRegexWithValidCheck = Regex("""(?<!<)https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}(?!>)""")
 private val linkRegexWithoutValidCheck = Regex("""https://discord\.com/channels/\d{6,19}/\d{6,19}/\d{6,19}""")
 
 private fun String.extractLinks(force: Boolean): Sequence<String> {
