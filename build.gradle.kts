@@ -22,6 +22,9 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("net.dv8tion:JDA:5.0.0-alpha.17")
     implementation("com.github.ajalt.mordant:mordant:2.0.0-beta2")
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
 }
 
 java {

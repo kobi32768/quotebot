@@ -1,10 +1,12 @@
 package io.github.kobi32768.quotebot
 
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -35,6 +37,17 @@ class QuoteBot : ListenerAdapter() {
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        startCoroutine {
+            try {
+                onMessageReceivedSuspendable(event)
+            } catch (t: Throwable) {
+                printlog("unhandled exception: $t", State.EXCEPTION)
+                t.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun onMessageReceivedSuspendable(event: MessageReceivedEvent) {
         if (event.author.isBot) return
 
         val prefix = "https://discord.com/channels/"
@@ -50,14 +63,10 @@ class QuoteBot : ListenerAdapter() {
         // Command
         if (content.startsWith("!quote")) {
             val commands = content.split(' ')
-            val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
-                .reader()
-                .readText()
-                .trim()
 
             if (commands.containsAny("-v", "--version")) {
-                event.sendMessage("**Version: ** $version")
-                printlog("Displayed version ($version)", State.INFORMATION)
+                event.sendMessage("**Version: ** ${VersionHolder.version}")
+                printlog("Displayed version (${VersionHolder.version})", State.INFORMATION)
             }
         }
 
@@ -73,14 +82,20 @@ class QuoteBot : ListenerAdapter() {
 
             try {
                 quotedGuild = event.jda.getGuildById(guildId)!!
-                quotedChannel = quotedGuild.getQuotableChannelById(channelId)!!
-                quotedMessage = quotedChannel.retrieveMessageById(messageId).submit().get()
+                quotedChannel = quotedGuild.getQuotableChannelById(channelId])!!
+                quotedMessage = quotedChannel.retrieveMessageById(messageId).submit().await()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.NOT_EXIST); return
-            } catch (ex: ExecutionException) {
-                printlog("Execution Exception", State.EXCEPTION)
-                event.sendErrorMessage(Error.NOT_EXIST_MSG); return
+            } catch (ex: ErrorResponseException) {
+                // see https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes
+                if (ex.errorCode == 10008) {
+                    printlog("Message Not Exists error response", State.EXCEPTION)
+                    event.sendErrorMessage(Error.NOT_EXIST_MSG); return
+                } else {
+                    printlog("Unexpected Error Response: $ex", State.EXCEPTION)
+                    event.sendErrorMessage(Error.UNEXPECTED_ERROR); return
+                }
             } catch (ex: InsufficientPermissionException) {
                 printlog("Insufficient Permission Exception", State.EXCEPTION)
                 event.sendErrorMessage(Error.CANNOT_REF); return
@@ -109,5 +124,15 @@ class QuoteBot : ListenerAdapter() {
                 }
             }
         }
+    }
+
+    /**
+     * The class holds version of this bot. use an individual object for lazy init.
+     */
+    private object VersionHolder {
+        val version = this.javaClass.classLoader.getResourceAsStream("version.txt")!!
+            .reader()
+            .readText()
+            .trim()
     }
 }
