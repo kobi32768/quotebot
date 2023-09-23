@@ -20,7 +20,15 @@
 
 ### 1.1 quote
 
-If send the Message Link to text channel, Quote Bot reply content of link.
+If someone send a Message Link to following channels, Quote Bot replies the content of that link.
+- TextChannel
+- ThreadChannel
+- VoiceChannel
+- NewsChannel (not tested)
+- StageChannel (not tested)
+
+If you do not want Quote Bot to reply, you can escape this by wrapping a link with `<>`.  
+Example: `<https://discord.com/channels/GUILD_ID/CHANNEL_ID/MESSAGE_ID>`
 
 ### 1.2 command
 
