@@ -82,7 +82,7 @@ class QuoteBot : ListenerAdapter() {
 
             try {
                 quotedGuild = event.jda.getGuildById(guildId)!!
-                quotedChannel = quotedGuild.getQuotableChannelById(channelId])!!
+                quotedChannel = quotedGuild.getQuotableChannelById(channelId)!!
                 quotedMessage = quotedChannel.retrieveMessageById(messageId).submit().await()
             } catch (ex: NullPointerException) {
                 printlog("Null Pointer Exception", State.EXCEPTION)
