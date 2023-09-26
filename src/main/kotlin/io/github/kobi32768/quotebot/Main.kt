@@ -61,7 +61,7 @@ class QuoteBot : ListenerAdapter() {
             .replace("https://canary.discord.com/channels/", prefix)
 
         // Command
-        if (content.startsWith("!quote")) {
+        if (content.startsWith("!quote ")) {
             val commands = content.split(' ')
 
             if (commands.containsAny("-v", "--version")) {
