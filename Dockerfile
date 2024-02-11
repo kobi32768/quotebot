@@ -1,4 +1,4 @@
-FROM ibm-semeru-runtimes:open-8-jdk-focal as builder
+FROM eclipse-temurin:8-jdk-focal as builder
 
 COPY src /project/src
 COPY gradle /project/gradle
