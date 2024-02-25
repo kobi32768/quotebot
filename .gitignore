@@ -20,3 +20,4 @@ modules.xml
 
 # Files
 token.txt
+**/.env
