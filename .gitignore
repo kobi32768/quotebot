@@ -19,4 +19,5 @@ modules.xml
 .idea/misc.xml
 
 # Files
+token.txt
 **/.env
