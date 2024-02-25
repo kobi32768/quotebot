@@ -1,11 +1,11 @@
 FROM eclipse-temurin:8-jdk-focal as builder
 
-COPY src /project/src
+COPY gradlew /project/gradlew
 COPY gradle /project/gradle
-COPY build.gradle.kts /project/build.gradle.kts
 COPY settings.gradle.kts /project/settings.gradle.kts
 COPY gradle.properties /project/gradle.properties
-COPY gradlew /project/gradlew
+COPY build.gradle.kts /project/build.gradle.kts
+COPY src /project/src
 
 ENV GRADLE_OPTS="-Dorg.gradle.daemon=false"
 
