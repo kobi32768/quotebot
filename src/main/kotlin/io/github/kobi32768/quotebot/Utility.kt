@@ -16,7 +16,7 @@ fun List<String>.containsAny(vararg substring: String): Boolean {
 }
 
 fun MessageReceivedEvent.isForce(): Boolean {
-    return this.message.contentDisplay.split(' ').containsAny("-f", "--force")
+    return this.message.contentDisplay.split(' ', '\n').containsAny("-f", "--force")
 }
 
 fun compress64(id: String): String {
